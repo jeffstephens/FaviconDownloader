@@ -33,7 +33,7 @@ class FaviconDownloader
     public $icoUrl;       // (string) full URI to favicon
     public $icoType;      // (string) favicon type (file extension, ex: ico|gif|png)
     public $findMethod;   // (string) favicon url determination method (default /favicon.ico or found in head>link tag)
-    public $error;        // (string) details, in case of failure...
+    public $errors;        // (array)  details, in case of failure...
     public $icoExists;    // (bool)   tell if the favicon exists (set after calling downloadFavicon)
     public $icoMd5;       // (string) md5 of $icoData
     public $icoData;      // (binary) favicon binary data
@@ -50,6 +50,7 @@ class FaviconDownloader
      */
     public function __construct($url, $options = null, $auto = true)
     {
+        $this->errors = array();
         if (!$url) {
             throw new \InvalidArgumentException("url is empty");
         }
@@ -92,7 +93,7 @@ class FaviconDownloader
         // Downloading the page
         $html = $this->downloadAs($url, $info);
         if ($info['curl_errno'] !== CURLE_OK) {
-            $this->error = $info['curl_error'];
+            $this->pushError($info['curl_error']);
             $this->debugInfo['document_curl_errno'] = $info['curl_errno'];
             return false;
         }
@@ -201,7 +202,7 @@ class FaviconDownloader
         if (preg_match('/^\s*data:(.*?);base64,(.*)/i', $this->icoUrl, $matches)) {
             $content = base64_decode($matches[2]);
             if ($content === false) {
-                $this->error = "base64 decode error";
+                $this->pushError("base64 decode error");
                 return false;
             }
             $this->icoData   = $content;
@@ -232,18 +233,18 @@ class FaviconDownloader
 
         // Download error
         if ($content === false) {
-            $this->error = 'Favicon download error (HTTP '.$info['http_code'].')';
+            $this->pushError('Favicon download error (HTTP '.$info['http_code'].')');
             return false;
         }
 
         // Check favicon content
         if (strlen($content) == 0) {
-            $this->error = "Empty content";
+            $this->pushError("Empty content");
             return false;
         }
         $textTypes = array('text/html', 'text/plain');
         if (in_array($info['content_type'], $textTypes) || preg_match('#(</html>|</b>)#i', $content)) {
-            $this->error = "Seems to be a text document";
+            $this->pushError("Seems to be a text document");
             return false;
         }
 
@@ -385,5 +386,15 @@ class FaviconDownloader
             return $dump;
         }
         print_r($dump);
+    }
+
+    /**
+     * Push an error onto the stack of error messages
+     *
+     * @param string $message
+     */
+    private function pushError($message)
+    {
+        $this->errors[] = $message;
     }
 }
