@@ -9,6 +9,11 @@
  * @package FaviconDownloader
  * @version 1.0.0
  * @tutorial http://www.finalclap.com/faq/477-php-favicon-find-download
+ *
+ *
+ * MODIFIED BY Jeff Stephens <jeff@mocavo.com> while employed by Mocavo, a FindMyPast company
+ * to add functionality of other website metadata
+ * http://www.mocavo.com/
  */
 
 namespace Vincepare\FaviconDownloader;
@@ -21,7 +26,7 @@ class FaviconDownloader
     const URL_TYPE_ABSOLUTE_PATH = 3;
     const URL_TYPE_RELATIVE = 4;
     const URL_TYPE_EMBED_BASE64 = 5;
-    
+
     public $url;          // (string) Page URL
     public $pageUrl;      // (string) Page URL, after prospective redirects
     public $siteUrl;      // (string) Site root URL (homepage), based on $pageUrl
@@ -35,7 +40,7 @@ class FaviconDownloader
     public $debugInfo;    // (array)  additionnal debug info
     protected $httpProxy; // (string) HTTP proxy (ex: localhost:8888)
     protected $sslVerify; // (bool)   SSL verify peer (default: true)
-    
+
     /**
      * Create a new FaviconDownloader object, search & download favicon if $auto is true
      *
@@ -59,7 +64,7 @@ class FaviconDownloader
             $this->downloadFavicon();
         }
     }
-    
+
     /**
      * Download page and search html to find favicon URL. Returns favicon URL.
      * HTML parsing is achieved using regular expressions (http://blog.codinghorror.com/parsing-html-the-cthulhu-way/)
@@ -71,19 +76,19 @@ class FaviconDownloader
         if (!empty($this->icoUrl)) {
             return $this->icoUrl;
         }
-        
+
         // Check URL to search
         if (empty($this->url)) {
             throw new \Exception("url is empty");
         }
-        
+
         // Removing fragment (hash) from URL
         $url = $this->url;
         $urlInfo = parse_url($this->url);
         if (isset($urlInfo['fragment'])) {
             $url = str_replace('#'.$urlInfo['fragment'], '', $url);
         }
-        
+
         // Downloading the page
         $html = $this->downloadAs($url, $info);
         if ($info['curl_errno'] !== CURLE_OK) {
@@ -91,40 +96,40 @@ class FaviconDownloader
             $this->debugInfo['document_curl_errno'] = $info['curl_errno'];
             return false;
         }
-        
+
         // Saving final URL (after prospective redirects) and get root URL
         $this->pageUrl = $info['effective_url'];
         $pageUrlInfo = parse_url($this->pageUrl);
         if (!empty($pageUrlInfo['scheme']) && !empty($pageUrlInfo['host'])) {
             $this->siteUrl = $pageUrlInfo['scheme'].'://'.$pageUrlInfo['host'].'/';
         }
-        
+
         // Default favicon URL
         $this->icoUrl = $this->siteUrl.'favicon.ico';
         $this->findMethod = 'default';
-        
+
         // HTML <head> tag extraction
         preg_match('#^(.*)<\s*body#isU', $html, $matches);
         $htmlHead = isset($matches[1]) ? $matches[1] : $html;
-        
+
         // HTML <base> tag href extraction
         $base_href = null;
         if (preg_match('#<base[^>]+href=(["\'])([^>]+)\1#i', $htmlHead, $matches)) {
             $base_href = rtrim($matches[2], '/').'/';
             $this->debugInfo['base_href'] = $base_href;
         }
-        
+
         // HTML <link> icon tag analysis
         if (preg_match('#<\s*link[^>]*(rel=(["\'])[^>\2]*icon[^>\2]*\2)[^>]*>#i', $htmlHead, $matches)) {
             $link_tag = $matches[0];
             $this->debugInfo['link_tag'] = $link_tag;
-            
+
             // HTML <link> icon tag href analysis
             if (preg_match('#href\s*=\s*(["\'])(.*?)\1#i', $link_tag, $matches)) {
                 $ico_href = trim($matches[2]);
                 $this->debugInfo['ico_href'] = $ico_href;
                 $this->findMethod = 'head';
-                
+
                 // Building full absolute URL
                 $urlType = self::urlType($ico_href);
                 switch($urlType){
@@ -173,10 +178,10 @@ class FaviconDownloader
                 }
             }
         }
-        
+
         return $this->icoUrl;
     }
-    
+
     /**
      * Download the favicon if available
      */
@@ -186,12 +191,12 @@ class FaviconDownloader
         if (empty($this->icoUrl)) {
             return false;
         }
-        
+
         // Prevent useless re-download
         if (!empty($this->icoData)) {
             return false;
         }
-        
+
         // Base64 embed favicon
         if (preg_match('/^\s*data:(.*?);base64,(.*)/i', $this->icoUrl, $matches)) {
             $content = base64_decode($matches[2]);
@@ -205,11 +210,11 @@ class FaviconDownloader
             $this->icoType   = self::getExtensionFromMimeType($matches[1]);
             return true;
         }
-        
+
         // Download favicon
         $content = $this->downloadAs($this->icoUrl, $info);
         $this->debugInfo['favicon_download_metadata'] = $info;
-        
+
         // Failover : if getting a 404 with favicon URL found in HTML source, trying with the default favicon URL
         $doFailover = $content === false
             && $info['http_code'] == 404
@@ -224,13 +229,13 @@ class FaviconDownloader
             $this->debugInfo['failover'] = true;
             return $this->downloadFavicon();
         }
-        
+
         // Download error
         if ($content === false) {
             $this->error = 'Favicon download error (HTTP '.$info['http_code'].')';
             return false;
         }
-        
+
         // Check favicon content
         if (strlen($content) == 0) {
             $this->error = "Empty content";
@@ -241,14 +246,14 @@ class FaviconDownloader
             $this->error = "Seems to be a text document";
             return false;
         }
-        
+
         // All right baby !
         $this->icoData   = $content;
         $this->icoMd5    = md5($content);
         $this->icoExists = true;
         return true;
     }
-    
+
     /**
      * Download URL as Firefox with cURL
      * Details available in $info if provided
@@ -265,17 +270,17 @@ class FaviconDownloader
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);  // Follow redirects (302, 301)
         curl_setopt($ch, CURLOPT_MAXREDIRS, 20);         // Follow up to 20 redirects
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0');
-        
+
         // Don't check SSL certificate to allow autosigned certificate
         if ($this->sslVerify === false) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         }
-        
+
         // Set HTTP proxy
         if ($this->httpProxy) {
             curl_setopt($ch, CURLOPT_PROXY, $this->httpProxy);
         }
-        
+
         $content = curl_exec($ch);
         $info['curl_errno'] = curl_errno($ch);
         $info['curl_error'] = curl_error($ch);
@@ -284,13 +289,13 @@ class FaviconDownloader
         $info['redirect_count'] = curl_getinfo($ch, CURLINFO_REDIRECT_COUNT);
         $info['content_type'] = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
         curl_close($ch);
-        
+
         if ($info['curl_errno'] !== CURLE_OK || in_array($info['http_code'], array(403, 404, 500, 503))) {
             return false;
         }
         return $content;
     }
-    
+
     /**
      * Return file extension from an URL or a file path
      *
@@ -305,7 +310,7 @@ class FaviconDownloader
         $info = pathinfo($url);
         return $info['extension'];
     }
-    
+
     /**
      * Return file extension from MIME type
      *
@@ -326,7 +331,7 @@ class FaviconDownloader
         }
         return 'ico';
     }
-    
+
     /**
      * Return URL type, either :
      * - URL_TYPE_ABSOLUTE        ex: http://www.domain.com/images/fav.ico
@@ -350,7 +355,7 @@ class FaviconDownloader
         }
         return self::URL_TYPE_RELATIVE;
     }
-    
+
     /**
      * Show object printable properties, or return it if $return is true
      */
