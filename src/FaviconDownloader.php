@@ -54,6 +54,7 @@ class FaviconDownloader
     public function __construct($url, $options = null, $auto = true)
     {
         $this->errors = array();
+
         if (!$url) {
             throw new \InvalidArgumentException("url is empty");
         }
@@ -273,9 +274,7 @@ class FaviconDownloader
         if ($this->getDOM() !== false) {
             $title_elements = $this->getDOM()->getElementsByTagName('title');
 
-            if (empty($title_elements)) {
-                $this->pageTitle = '';
-            } else {
+            if ( ! empty($title_elements)) {
                 // even if there are multiple <title> tags found, take the first for the sake of simplicity
                 $this->pageTitle = trim($title_elements[0]->nodeValue);
             }
@@ -296,7 +295,6 @@ class FaviconDownloader
             $meta_elements = $this->getDOM()->getElementsByTagName('meta');
 
             if (empty($meta_elements)) {
-                $this->pageDesc = '';
             } else {
                 // iterate over <meta> tags until we find description (and take the first)
                 foreach ($meta_elements as $element) {
@@ -304,10 +302,6 @@ class FaviconDownloader
                         $this->pageDesc = trim($element->getAttribute('content'));
                         return;
                     }
-                }
-
-                if (is_null($this->pageDesc)) {
-                    $this->pageDesc = '';
                 }
             }
         }
