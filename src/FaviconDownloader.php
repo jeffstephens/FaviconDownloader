@@ -255,6 +255,22 @@ class FaviconDownloader
     }
 
     /**
+     * Fetch page title
+     */
+    public function getPageTitle()
+    {
+
+    }
+
+    /**
+     * Fetch page description
+     */
+    public function getPageDescription()
+    {
+
+    }
+
+    /**
      * Download URL as Firefox with cURL
      * Details available in $info if provided
      *
