@@ -12,7 +12,7 @@
  *
  *
  * MODIFIED BY Jeff Stephens <jeff@mocavo.com> while employed by Mocavo, a FindMyPast company
- * to add functionality of other website metadata
+ * - added ability to fetch other website metadata such as description
  * http://www.mocavo.com/
  */
 
