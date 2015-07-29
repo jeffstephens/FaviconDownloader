@@ -12,6 +12,12 @@
             "email": "opensource@finalclap.com",
             "homepage": "http://www.finalclap.com/",
             "role": "Developer"
+        },
+        {
+            "name": "Jeff Stephens",
+            "email": "jeff@mocavo.com",
+            "homepage": "http://www.mocavo.com/about/jeff/",
+            "role": "Developer"
         }
     ],
     "require": {
