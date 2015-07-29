@@ -262,7 +262,15 @@ class FaviconDownloader
      */
     public function getPageTitle()
     {
+        if (empty($this->pageUrl)) {
+            $this->pushError('No pageUrl to fetch title from');
+            return false;
+        }
 
+        // idempotentcy
+        if ( ! empty($this->pageTitle)) {
+            return false;
+        }
     }
 
     /**
@@ -270,7 +278,15 @@ class FaviconDownloader
      */
     public function getPageDescription()
     {
+        if (empty($this->pageUrl)) {
+            $this->pushError('No pageUrl to fetch description from');
+            return false;
+        }
 
+        // idempotentcy
+        if ( ! empty($this->pageDesc)) {
+            return false;
+        }
     }
 
     /**
