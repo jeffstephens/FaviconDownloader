@@ -397,6 +397,10 @@ class FaviconDownloader
      */
     private function pushError($message)
     {
+        if (empty($message)) {
+            $this->pushError('Tried to log empty error');
+            return;
+        }
         $this->errors[] = $message;
     }
 }
