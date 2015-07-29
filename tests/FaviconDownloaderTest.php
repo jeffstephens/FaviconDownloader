@@ -61,7 +61,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://example.org/', $this->options);
         $this->assertNull($fav->icoData);
-        $this->assertNotNull($fav->error);
+        $this->assertNotNull($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
         $this->assertEquals(404, $fav->debugInfo['favicon_download_metadata']['http_code']);
     }
@@ -73,7 +73,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('https://getcomposer.org/', $this->options);
         $this->assertNotNull($fav->icoData);
-        $this->assertEmpty($fav->error);
+        $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
         $this->assertEquals(200, $fav->debugInfo['favicon_download_metadata']['http_code']);
         $this->assertEquals('https://getcomposer.org/favicon.ico', $fav->icoUrl);
@@ -87,7 +87,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('https://code.google.com/p/chromium/issues/detail?id=236848', $this->options);
         $this->assertNotNull($fav->icoData);
-        $this->assertEmpty($fav->error);
+        $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
         $this->assertEquals(200, $fav->debugInfo['favicon_download_metadata']['http_code']);
         $this->assertEquals('https://ssl.gstatic.com/codesite/ph/images/phosting.ico', $fav->icoUrl);
@@ -101,7 +101,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://stackoverflow.com/questions/19503326/bug-with-chrome-tabs-create-in-a-loop', $this->options);
         $this->assertNotNull($fav->icoData);
-        $this->assertEmpty($fav->error);
+        $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
         $this->assertEquals(200, $fav->debugInfo['favicon_download_metadata']['http_code']);
         $this->assertEquals('http://cdn.sstatic.net/stackoverflow/img/favicon.ico?v=5bcec08ba0c5', $fav->icoUrl);
@@ -115,7 +115,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://www.koreus.com/', $this->options);
         $this->assertNotNull($fav->icoData);
-        $this->assertEmpty($fav->error);
+        $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
         $this->assertEquals(200, $fav->debugInfo['favicon_download_metadata']['http_code']);
         $this->assertEquals('http://www.koreus.com/favicon.png', $fav->icoUrl);
@@ -129,7 +129,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://localhost/FaviconDownloader/weird-cases/absolute_path-with-base.html', $this->options);
         $this->assertNotNull($fav->icoData);
-        $this->assertEmpty($fav->error);
+        $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
         $this->assertEquals(200, $fav->debugInfo['favicon_download_metadata']['http_code']);
         $this->assertEquals('https://jquery.org/jquery-wp-content/themes/jquery.org/i/favicon.ico', $fav->icoUrl);
@@ -143,7 +143,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://book.cakephp.org/2.0/en/core-utility-libraries/app.html', $this->options);
         $this->assertNotNull($fav->icoData);
-        $this->assertEmpty($fav->error);
+        $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
         $this->assertEquals(200, $fav->debugInfo['favicon_download_metadata']['http_code']);
         $this->assertEquals('http://book.cakephp.org/2.0/en/core-utility-libraries/../_static/favicon.ico', $fav->icoUrl);
@@ -157,7 +157,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://localhost/FaviconDownloader/weird-cases/relative-with-base.html', $this->options);
         $this->assertNotNull($fav->icoData);
-        $this->assertEmpty($fav->error);
+        $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
         $this->assertEquals(200, $fav->debugInfo['favicon_download_metadata']['http_code']);
         $this->assertEquals('https://www.npmjs.com/static/images/touch-icons/favicon.ico', $fav->icoUrl);
@@ -171,7 +171,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://localhost/FaviconDownloader/weird-cases/failover.html', $this->options);
         $this->assertNotNull($fav->icoData);
-        $this->assertEmpty($fav->error);
+        $this->assertEmpty($fav->errors);
         $this->assertTrue(isset($fav->debugInfo['failover']));
         $this->assertEquals(200, $fav->debugInfo['favicon_download_metadata']['http_code']);
         $this->assertEquals('http://localhost/favicon.ico', $fav->icoUrl);
@@ -185,7 +185,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://www.cmsmadesimple.fr/forum/viewtopic.php?pid=34728#p34728', $this->options);
         $this->assertNotNull($fav->icoData);
-        $this->assertEmpty($fav->error);
+        $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
         $this->assertEquals(200, $fav->debugInfo['favicon_download_metadata']['http_code']);
         $this->assertEquals('http://www.cmsmadesimple.fr/forum/favicon.ico', $fav->icoUrl);
@@ -199,7 +199,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://localhost/FaviconDownloader/weird-cases/base64-embed-favicon.html', $this->options);
         $this->assertNotNull($fav->icoData);
-        $this->assertEmpty($fav->error);
+        $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
         $this->assertFalse(isset($fav->debugInfo['favicon_download_metadata']));
         $this->assertEquals('head base64', $fav->findMethod);
@@ -212,7 +212,7 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://no-subdomain.no-hostname.fr/');
         $this->assertNull($fav->icoData);
-        $this->assertNotNull($fav->error);
+        $this->assertNotNull($fav->errors);
         $this->assertEquals(CURLE_COULDNT_RESOLVE_HOST, $fav->debugInfo['document_curl_errno']);
     }
 }
