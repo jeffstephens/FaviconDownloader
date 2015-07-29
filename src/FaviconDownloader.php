@@ -65,6 +65,8 @@ class FaviconDownloader
         if ($auto) {
             $this->getFaviconUrl();
             $this->downloadFavicon();
+            $this->getPageTitle();
+            $this->getPageDescription();
         }
     }
 
