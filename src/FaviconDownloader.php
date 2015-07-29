@@ -42,6 +42,7 @@ class FaviconDownloader
     public $debugInfo;    // (array)  additional debug info
     protected $httpProxy; // (string) HTTP proxy (ex: localhost:8888)
     protected $sslVerify; // (bool)   SSL verify peer (default: true)
+    private $pageDOM;     // (DOMDocument) DOM representation of the page URL
 
     /**
      * Create a new FaviconDownloader object, search & download favicon if $auto is true
@@ -264,14 +265,21 @@ class FaviconDownloader
      */
     public function getPageTitle()
     {
-        if (empty($this->pageUrl)) {
-            $this->pushError('No pageUrl to fetch title from');
-            return false;
-        }
-
         // idempotentcy
         if ( ! empty($this->pageTitle)) {
             return false;
+        }
+
+        if ($this->getDOM() !== false) {
+            $title_elements = $this->getDOM()->getElementsByTagName('title');
+
+            if (empty($title_elements)) {
+                $this->pushError('No title found');
+                $this->pageTitle = '';
+            } else {
+                // even if there are multiple <title> tags found, take the first for the sake of simplicity
+                $this->pageTitle = trim($title_elements[0]->nodeValue);
+            }
         }
     }
 
@@ -280,15 +288,58 @@ class FaviconDownloader
      */
     public function getPageDescription()
     {
-        if (empty($this->pageUrl)) {
-            $this->pushError('No pageUrl to fetch description from');
-            return false;
-        }
-
         // idempotentcy
         if ( ! empty($this->pageDesc)) {
             return false;
         }
+
+        if ($this->getDOM() !== false) {
+            $meta_elements = $this->getDOM()->getElementsByTagName('meta');
+
+            if (empty($meta_elements)) {
+                $this->pushError('No description found');
+                $this->pageDesc = '';
+            } else {
+                // iterate over <meta> tags until we find description (and take the first)
+                foreach ($meta_elements as $element) {
+                    if (strcmp(trim($element->getAttribute('name')), 'description') === 0) {
+                        $this->pageDesc = trim($element->getAttribute('content'));
+                        return;
+                    }
+                }
+
+                if (is_null($this->pageDesc)) {
+                    $this->pushError('No description found');
+                    $this->pageDesc = '';
+                }
+            }
+        }
+    }
+
+    /**
+     * Get and store DOM for inspection
+     */
+    private function getDOM() {
+        if (empty($this->pageUrl)) {
+            $this->pushError('No pageUrl to fetch DOM from');
+            return false;
+        }
+
+        // idempotentcy
+        if ( ! empty($this->pageDOM)) {
+            return $this->pageDOM;
+        }
+
+        $pageSource = @file_get_contents($this->pageUrl);
+        if ($pageSource === false || ! strlen($pageSource)) {
+            $this->pushError('Empty response when fetching page source');
+            return false;
+        }
+
+        $this->pageDOM = new \DOMDocument();
+        $this->pageDOM->loadHTML($pageSource);
+
+        return $this->pageDOM;
     }
 
     /**
