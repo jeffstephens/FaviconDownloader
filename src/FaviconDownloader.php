@@ -274,7 +274,6 @@ class FaviconDownloader
             $title_elements = $this->getDOM()->getElementsByTagName('title');
 
             if (empty($title_elements)) {
-                $this->pushError('No title found');
                 $this->pageTitle = '';
             } else {
                 // even if there are multiple <title> tags found, take the first for the sake of simplicity
@@ -297,7 +296,6 @@ class FaviconDownloader
             $meta_elements = $this->getDOM()->getElementsByTagName('meta');
 
             if (empty($meta_elements)) {
-                $this->pushError('No description found');
                 $this->pageDesc = '';
             } else {
                 // iterate over <meta> tags until we find description (and take the first)
@@ -309,7 +307,6 @@ class FaviconDownloader
                 }
 
                 if (is_null($this->pageDesc)) {
-                    $this->pushError('No description found');
                     $this->pageDesc = '';
                 }
             }
@@ -321,7 +318,6 @@ class FaviconDownloader
      */
     private function getDOM() {
         if (empty($this->pageUrl)) {
-            $this->pushError('No pageUrl to fetch DOM from');
             return false;
         }
 
@@ -332,12 +328,11 @@ class FaviconDownloader
 
         $pageSource = @file_get_contents($this->pageUrl);
         if ($pageSource === false || ! strlen($pageSource)) {
-            $this->pushError('Empty response when fetching page source');
             return false;
         }
 
         $this->pageDOM = new \DOMDocument();
-        $this->pageDOM->loadHTML($pageSource);
+        @$this->pageDOM->loadHTML($pageSource); // pages are all malformed. warnings are fine.
 
         return $this->pageDOM;
     }
