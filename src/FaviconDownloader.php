@@ -37,7 +37,9 @@ class FaviconDownloader
     public $icoExists;    // (bool)   tell if the favicon exists (set after calling downloadFavicon)
     public $icoMd5;       // (string) md5 of $icoData
     public $icoData;      // (binary) favicon binary data
-    public $debugInfo;    // (array)  additionnal debug info
+    public $pageTitle;    // (string) the page's <title>
+    public $pageDesc;     // (string) the page's meta description
+    public $debugInfo;    // (array)  additional debug info
     protected $httpProxy; // (string) HTTP proxy (ex: localhost:8888)
     protected $sslVerify; // (bool)   SSL verify peer (default: true)
 
