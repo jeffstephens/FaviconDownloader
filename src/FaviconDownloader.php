@@ -298,7 +298,7 @@ class FaviconDownloader
             } else {
                 // iterate over <meta> tags until we find description (and take the first)
                 foreach ($meta_elements as $element) {
-                    if (strcmp(trim($element->getAttribute('name')), 'description') === 0) {
+                    if (stripos(trim($element->getAttribute('name')), 'description') !== false) {
                         $this->pageDesc = trim($element->getAttribute('content'));
                         return;
                     }
