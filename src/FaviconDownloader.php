@@ -326,7 +326,11 @@ class FaviconDownloader
         }
 
         $this->pageDOM = new \DOMDocument();
-        @$this->pageDOM->loadHTML($pageSource); // pages are all malformed. warnings are fine.
+
+        // websites are all malformed. warnings are fine.
+        if (@$this->pageDOM->loadHTML($pageSource) === false) {
+            $this->pushError('Failed to parse HTML document into DOM for ' . $this->pageUrl);
+        }
 
         return $this->pageDOM;
     }
