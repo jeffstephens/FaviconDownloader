@@ -1,10 +1,10 @@
 {
-    "name": "vincepare/favicon-downloader",
+    "name": "jeffstephens/favicon-downloader",
     "type": "library",
 	"time": "2015-06-22",
     "description": "Find & download favicons",
     "keywords": ["favicon","curl","bookmark","download","html"],
-    "homepage": "https://github.com/vincepare/FaviconDownloader",
+    "homepage": "https://github.com/jeffstephens/FaviconDownloader",
     "license": "Apache-2.0",
     "authors": [
         {
