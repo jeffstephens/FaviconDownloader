@@ -101,6 +101,8 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://stackoverflow.com/questions/19503326/bug-with-chrome-tabs-create-in-a-loop', $this->options);
         $this->assertNotNull($fav->icoData);
+        $this->assertNotNull($fav->pageTitle);
+        $this->assertNotNull($fav->pageDesc);
         $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
         $this->assertEquals(200, $fav->debugInfo['favicon_download_metadata']['http_code']);
@@ -212,6 +214,8 @@ class FaviconDownloaderTest extends \PHPUnit_Framework_TestCase
     {
         $fav = new FaviconDownloader('http://no-subdomain.no-hostname.fr/');
         $this->assertNull($fav->icoData);
+        $this->assertNull($fav->pageTitle);
+        $this->assertNull($fav->pageDesc);
         $this->assertNotNull($fav->errors);
         $this->assertEquals(CURLE_COULDNT_RESOLVE_HOST, $fav->debugInfo['document_curl_errno']);
     }
