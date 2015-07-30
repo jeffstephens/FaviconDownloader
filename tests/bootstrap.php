@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of FaviconDownloader.
+ * This file is part of MetaFetch.
  *
  * PHPUnit bootstrap
  */
