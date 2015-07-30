@@ -3,16 +3,16 @@ MetaFetch
 MetaFetch can find metadata (and download it) from a URL.
 This PHP class handles multiple favicons flavors, including some edge cases like relative URL or embed favicons:
 
-* Absolute URL :
-  `<link rel="shortcut icon" href="http://www.domain.com/images/fav.ico" />`
-* Absolute URL with relative scheme :
-  `<link rel="shortcut icon" href="//www.domain.com/images/fav.ico" />`
-* Absolute path :
-  `<link rel="shortcut icon" href="/images/fav.ico" />`
-* Relative URL :
-  `<link rel="shortcut icon" href="../images/fav.ico" />`
-* Embed base64-encoded favicon :
-  `<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAE ... /wAA//8AAA==" />`
+* Absolute URL:
+`<link rel="shortcut icon" href="http://www.domain.com/images/fav.ico" />`
+* Absolute URL with relative scheme:
+`<link rel="shortcut icon" href="//www.domain.com/images/fav.ico" />`
+* Absolute path:
+`<link rel="shortcut icon" href="/images/fav.ico" />`
+* Relative URL:
+`<link rel="shortcut icon" href="../images/fav.ico" />`
+* Embed base64-encoded favicon:
+`<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAE ... /wAA//8AAA==" />`
 
 It also fetches metadata such as page title and description.
 
