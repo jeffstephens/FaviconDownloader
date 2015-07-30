@@ -150,6 +150,7 @@ class MetaFetchTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(200, $fav->debugInfo['favicon_download_metadata']['http_code']);
         $this->assertEquals('http://book.cakephp.org/2.0/en/core-utility-libraries/../_static/favicon.ico', $fav->icoUrl);
         $this->assertEquals('head relative without base href', $fav->findMethod);
+        $this->assertEquals('App Class &mdash; CakePHP Cookbook 2.x documentation', $fav->pageTitle);
     }
 
     /**

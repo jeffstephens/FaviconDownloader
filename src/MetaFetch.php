@@ -65,6 +65,14 @@ class MetaFetch
         }
     }
 
+    public function getSummary() {
+        return array (
+            'icoData' => $this->icoData,
+            'title' => $this->pageTitle,
+            'description' => $this->pageDesc,
+        );
+    }
+
     /**
      * Download page and search html to find favicon URL. Returns favicon URL.
      * HTML parsing is achieved using regular expressions (http://blog.codinghorror.com/parsing-html-the-cthulhu-way/)
@@ -269,7 +277,7 @@ class MetaFetch
 
             if ( ! empty($title_elements)) {
                 // even if there are multiple <title> tags found, take the first for the sake of simplicity
-                $this->pageTitle = trim($title_elements[0]->nodeValue);
+                $this->pageTitle = trim($title_elements->item(0)->nodeValue);
             }
         }
     }
