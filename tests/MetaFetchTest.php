@@ -129,7 +129,7 @@ class MetaFetchTest extends \PHPUnit_Framework_TestCase
      */
     public function testHeadAbsolutePathWithBase()
     {
-        $fav = new MetaFetch('http://localhost/MetaFetch/weird-cases/absolute_path-with-base.html', $this->options);
+        $fav = new MetaFetch('http://localhost/FaviconDownloader/weird-cases/absolute_path-with-base.html', $this->options);
         $this->assertNotNull($fav->icoData);
         $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
@@ -157,7 +157,7 @@ class MetaFetchTest extends \PHPUnit_Framework_TestCase
      */
     public function testHeadRelativePathWithBase()
     {
-        $fav = new MetaFetch('http://localhost/MetaFetch/weird-cases/relative-with-base.html', $this->options);
+        $fav = new MetaFetch('http://localhost/FaviconDownloader/weird-cases/relative-with-base.html', $this->options);
         $this->assertNotNull($fav->icoData);
         $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
@@ -171,7 +171,7 @@ class MetaFetchTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailover()
     {
-        $fav = new MetaFetch('http://localhost/MetaFetch/weird-cases/failover.html', $this->options);
+        $fav = new MetaFetch('http://localhost/FaviconDownloader/weird-cases/failover.html', $this->options);
         $this->assertNotNull($fav->icoData);
         $this->assertEmpty($fav->errors);
         $this->assertTrue(isset($fav->debugInfo['failover']));
@@ -199,7 +199,7 @@ class MetaFetchTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmbedBase64()
     {
-        $fav = new MetaFetch('http://localhost/MetaFetch/weird-cases/base64-embed-favicon.html', $this->options);
+        $fav = new MetaFetch('http://localhost/FaviconDownloader/weird-cases/base64-embed-favicon.html', $this->options);
         $this->assertNotNull($fav->icoData);
         $this->assertEmpty($fav->errors);
         $this->assertFalse(isset($fav->debugInfo['failover']));
@@ -216,7 +216,7 @@ class MetaFetchTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($fav->icoData);
         $this->assertNull($fav->pageTitle);
         $this->assertNull($fav->pageDesc);
-        $this->assertNotNull($fav->errors);
+        $this->assertNotEmpty($fav->errors);
         $this->assertEquals(CURLE_COULDNT_RESOLVE_HOST, $fav->debugInfo['document_curl_errno']);
     }
 }
