@@ -25,4 +25,4 @@ if (!preg_match('#(Fiddler Echo Service|^\s*\[Fiddler\])#i', $content)) {
     trigger_error("Fiddler is not running at ".$echoServiceUrl, E_USER_ERROR);
 }
 
-require __DIR__.'/../src/FaviconDownloader.php';
+require __DIR__.'/../src/MetaFetch.php';
