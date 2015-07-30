@@ -28,7 +28,7 @@ The easiest way to install MetaFetch is to use Composer from the command line:
 composer require jeffstephens/meta-fetch
 ```
 
-Otherwise, just download [MetaFetch.php](https://raw.githubusercontent.com/jeffstephens/meta-fetch/master/src/MetaFetch.php) and require it manually. Tested on PHP 5.3, 5.4, 5.5 & 5.6.
+Otherwise, just download [MetaFetch.php](https://raw.githubusercontent.com/jeffstephens/MetaFetch/master/src/MetaFetch.php) and require it manually. Tested on PHP 5.3, 5.4, 5.5 & 5.6.
 
 ### Example
 ```php
