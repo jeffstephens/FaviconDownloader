@@ -7,11 +7,6 @@
  * @license http://opensource.org/licenses/Apache-2.0
  * @package MetaFetch
  * @version 1.0.0
- *
- *
- * MODIFIED BY Jeff Stephens <jeff@mocavo.com> while employed by Mocavo, a FindMyPast company
- * - added ability to fetch other website metadata such as description
- * http://www.mocavo.com/
  */
 
 namespace Jeffstephens\MetaFetch;
