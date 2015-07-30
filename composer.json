@@ -1,10 +1,10 @@
 {
-    "name": "jeffstephens/favicon-downloader",
+    "name": "jeffstephens/meta-fetch",
     "type": "library",
 	"time": "2015-06-22",
     "description": "Find & download favicons, site title, and site description",
     "keywords": ["favicon","curl","bookmark","download","html"],
-    "homepage": "https://github.com/jeffstephens/FaviconDownloader",
+    "homepage": "https://github.com/jeffstephens/meta-fetch",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Vincepare\\FaviconDownloader\\": "src"
+            "Jeffstephens\\MetaFetch\\": "src"
         }
     }
 }

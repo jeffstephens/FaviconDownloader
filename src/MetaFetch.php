@@ -1,14 +1,12 @@
 <?php
 /**
- * FaviconDownloader - find favicon URL and download it easy
+ * MetaFetch - fetch metadata from given URL
  * Requirements : PHP 5.3+ with curl extension
  *
- * @author Vincent Paré (www.finalclap.com)
- * @copyright © 2014-2015 Vincent Paré
+ * @author Jeff Stephens <jeff@mocavo.com>
  * @license http://opensource.org/licenses/Apache-2.0
- * @package FaviconDownloader
+ * @package MetaFetch
  * @version 1.0.0
- * @tutorial http://www.finalclap.com/faq/477-php-favicon-find-download
  *
  *
  * MODIFIED BY Jeff Stephens <jeff@mocavo.com> while employed by Mocavo, a FindMyPast company
@@ -16,9 +14,9 @@
  * http://www.mocavo.com/
  */
 
-namespace Vincepare\FaviconDownloader;
+namespace Jeffstephens\MetaFetch;
 
-class FaviconDownloader
+class MetaFetch
 {
     // URL types
     const URL_TYPE_ABSOLUTE = 1;
@@ -45,7 +43,7 @@ class FaviconDownloader
     private $pageDOM;     // (DOMDocument) DOM representation of the page URL
 
     /**
-     * Create a new FaviconDownloader object, search & download favicon if $auto is true
+     * Create a new MetaFetch object, search & download favicon if $auto is true
      *
      * @param string $url Page URL
      * @param array $options Optional settings
